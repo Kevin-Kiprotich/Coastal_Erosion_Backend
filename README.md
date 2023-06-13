@@ -39,7 +39,7 @@ Using ```axios``` you can send a request and then get a response which is a dict
 ### Login sequence using axios
 ```const handleSubmit = async (e) => {
         e.preventDefault();
-        await axios.post('/login/', {
+        await axios.post(' http://127.0.0.1:8000/login/', {
             "email": logdata.email,
             "password": logdata.password
         }).then((res) => {
@@ -80,7 +80,7 @@ const handleSubmit = async (e) => {
             setVal("Passwords do not match");
             setCol("rgb(153,15,2)");
         }else{
-            await axios.post('/signup/',{
+            await axios.post(' http://127.0.0.1:8000/signup/',{
                 'first_name':logdata.first_name,
                 'last_name':logdata.last_name,
                 'email':logdata.email,
