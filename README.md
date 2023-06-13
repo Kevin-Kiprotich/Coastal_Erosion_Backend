@@ -19,7 +19,7 @@ A django server to manage user registration and login sequences.
 ``` cd folderName```
 #### 7. Run the server
 ``` py manage.py runsever ```
-if successful then the output should look like this
+ If successful then the output should look like this
 ``` Watching for file changes with StatReloader
 Performing system checks...
 
