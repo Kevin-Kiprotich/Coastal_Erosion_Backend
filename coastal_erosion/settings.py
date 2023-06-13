@@ -124,3 +124,26 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+CSRF_TRUSTED_ORIGINS=["http://localhost:8000/","http://127.0.0.1:8000/","http://192.168.1.32:8000/"]
+
+
+CORS_ORIGIN_WHITELIST=[
+   "http://localhost:3000",'http://localhost:8000',"http://192.168.1.32:8000"
+]
+
+
+SIMPLLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME":datetime.timedelta(minutes=5),
+    "REFRESH_TOKEN_LIFETIME":datetime.timedelta(days=1),
+    "UPDATE_LAST_LOGIN":True,
+    "AUTH_HEADER_TYPES": ("Bearer",),
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+       'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        #'rest_framework.authentication.SessionAuthentication',
+    ]
+}
