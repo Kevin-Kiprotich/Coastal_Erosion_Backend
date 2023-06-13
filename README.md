@@ -57,8 +57,7 @@ Using ```axios``` you can send a request and then get a response which is a dict
                         first_name:decodedToken.first_name,
                         last_name:decodedToken.last_name,
                         phone_number:decodedToken.phone_number,
-                        gender:decodedToken.gender,
-                        emergecy_contact:decodedToken.emergency_contact
+                        institution:decodedToken.institution,
                     }
                     todash(data); 
                 } 
