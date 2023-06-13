@@ -70,7 +70,7 @@ Using ```axios``` you can send a request and then get a response which is a dict
   ```
     
     
-### Sign-up/Registration Sequence
+### Sign-up/Registration Sequence with axios
 ```
 const handleSubmit = async (e) => {
         e.preventDefault()
