@@ -13,6 +13,14 @@ from rest_framework.response import Response
 from django.conf import settings
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import login
+from verify_email.email_handler import send_verification_email
+from .tokens import account_activation_token
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string 
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.core.mail import EmailMessage
+from django.contrib import messages
 import os
 from .models import AppUser
 
@@ -47,6 +55,18 @@ class LoginView(APIView):
                 return Response({'Success':False,'Message': 'Email and Password do not match'})
         except AppUser.DoesNotExist:
             return Response({'Success':False,'Message':"The email is not registered"})
+def activate(request,uidb64,token):
+    User=get_user_model()
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except:
+        user=None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+
+        messages.success(request, "Thank you for your email confirmation. Now you can login your account.")
 
 class SignUpView(APIView):
     def post(self,request):
@@ -63,6 +83,15 @@ class SignUpView(APIView):
         except AppUser.DoesNotExist:
             user=AppUser.objects.create_user(email=email, password=password,
                                           first_name=first_name,last_name=last_name,institution=institution,sector=sector,role=role)
-            
+            user.is_active=False
+            mail_subject = "Activate your user account."
+            message = render_to_string("template_activate_account.html", {
+                'user': user.username,
+                'domain': get_current_site(request).domain,
+                'uid': urlsafe_base64_encode(force_bytes(email)),
+                'token': account_activation_token.make_token(user),
+                "protocol": 'https' if request.is_secure() else 'http'
+            })
+            email = EmailMessage(mail_subject, message, to=[email])
             return Response({'Success': True,'Message': "Account Created Successfully"})
       
