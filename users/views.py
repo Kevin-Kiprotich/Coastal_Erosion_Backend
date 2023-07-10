@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate,get_user_model
 from django.http import JsonResponse
 from django.views import View
 from django.http import HttpResponse
+from django.shortcuts import render, redirect
 from django.template import loader
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
@@ -59,14 +60,17 @@ def activate(request,uidb64,token):
     User=get_user_model()
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(pk=uid)
+        print(uid)
+        user = User.objects.get(email=uid)
+        print(user)
     except:
         user=None
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
 
-        messages.success(request, "Thank you for your email confirmation. Now you can login your account.")
+        # messages.success(request, "Thank you for your email confirmation. Now you can login your account.")
+        return redirect('https://www.google.com')
 
 class SignUpView(APIView):
     def post(self,request):
@@ -84,6 +88,7 @@ class SignUpView(APIView):
             user=AppUser.objects.create_user(email=email, password=password,
                                           first_name=first_name,last_name=last_name,institution=institution,sector=sector,role=role)
             user.is_active=False
+            user.save()
             mail_subject = "Activate your user account."
             message = render_to_string("template_activate_account.html", {
                 'user': user.username,
@@ -93,5 +98,9 @@ class SignUpView(APIView):
                 "protocol": 'https' if request.is_secure() else 'http'
             })
             email = EmailMessage(mail_subject, message, to=[email])
+            if email.send():
+                print("Email sent")
+            else:
+                print('Email not sent')
             return Response({'Success': True,'Message': "Account Created Successfully"})
       

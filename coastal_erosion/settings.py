@@ -154,8 +154,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'cogeos@locateit.co.ke'
-EMAIL_HOST_PASSWORD ='cogeos@2023'
+EMAIL_HOST_USER = 'kipchirchirkevin012@gmail.com'
+EMAIL_HOST_PASSWORD ='bkaiobxqvdfilxry'
 
-DEFAULT_FROM_EMAIL = 'noreply<cogeos@locateit.co.ke>'
+
 
