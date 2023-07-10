@@ -31,7 +31,9 @@ class LoginView(APIView):
                     'email':user.email,
                     'first_name':user.first_name,
                     'last_name':user.last_name,
-                    'institution':user.institution
+                    'institution':user.institution,
+                    'sector':user.sector,
+                    'role':user.role,
                 }
                 access_token = refresh.access_token
                 access_token.payload.update(payload)
@@ -43,7 +45,7 @@ class LoginView(APIView):
                 })
             else:
                 return Response({'Success':False,'Message': 'Email and Password do not match'})
-        except User.DoesNotExist:
+        except AppUser.DoesNotExist:
             return Response({'Success':False,'Message':"The email is not registered"})
 
 class SignUpView(APIView):
@@ -52,12 +54,15 @@ class SignUpView(APIView):
         last_name=request.data.get('last_name')
         email=request.data.get('email')
         institution=request.data.get('institution')
+        sector=request.data.get('sector')
+        role=request.data.get('role')
         password=request.data.get('password')
         try:
-            user=User.objects.get(email=email)
+            user=AppUser.objects.get(email=email)
             return Response({'Success':False,'Message':"The email is already taken"})
-        except User.DoesNotExist:
-            user=AppUser.objects.create_user(username=username,email=email, password=password,
-                                          first_name=first_name,last_name=last_name,institution=institution)
+        except AppUser.DoesNotExist:
+            user=AppUser.objects.create_user(email=email, password=password,
+                                          first_name=first_name,last_name=last_name,institution=institution,sector=sector,role=role)
             
             return Response({'Success': True,'Message': "Account Created Successfully"})
+      
