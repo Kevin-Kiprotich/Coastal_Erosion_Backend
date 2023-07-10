@@ -13,6 +13,7 @@ A django server to manage user registration and login sequences.
     py -m pip install djangorestframework django-cors-headers
     py -m pip install djangorestframework-simplejwt
     py -m pip install Django-Verify-Email
+    py -m pip install six
 ```
 #### 5. Create a folder to hold the project in the same directory as the virtual environment created
 
