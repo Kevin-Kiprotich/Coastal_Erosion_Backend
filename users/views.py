@@ -104,3 +104,19 @@ class SignUpView(APIView):
                 print('Email not sent')
             return Response({'Success': True,'Message': "Account Created Successfully"})
       
+class ChangePassword(APIView):
+    def post(self,request):
+        email=request.data.get('email')
+        try:
+            user=AppUser.objects.get(email=email)
+            mail_subject = "Activate your user account."
+            message = render_to_string("template_activate_account.html", {
+                'user': user.username,
+                'domain': get_current_site(request).domain,
+                'uid': urlsafe_base64_encode(force_bytes(email)),
+                'token': account_activation_token.make_token(user),
+                "protocol": 'https' if request.is_secure() else 'http'
+            })
+            email = EmailMessage(mail_subject, message, to=[email])
+        except AppUser.DoesNotExist:
+            return Response({'Success':False,'Message':'Email is not registered'})
