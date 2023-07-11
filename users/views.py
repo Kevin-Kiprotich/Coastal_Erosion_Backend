@@ -25,6 +25,7 @@ from django.contrib import messages
 import os
 from .models import AppUser
 
+userEmail=''
 class LoginView(APIView):
     def post(self, request):
         email = request.data.get('email')
@@ -71,6 +72,18 @@ def activate(request,uidb64,token):
 
         # messages.success(request, "Thank you for your email confirmation. Now you can login your account.")
         return redirect('https://www.google.com')
+def update(request,uidb64,token):
+    User=get_user_model()
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        print(uid)
+        user = User.objects.get(email=uid)
+        print(user)
+    except:
+        user=None
+    if user is not None and account_activation_token.check_token(user, token):
+        return redirect('https://www.google.com')
+
 
 class SignUpView(APIView):
     def post(self,request):
@@ -90,8 +103,8 @@ class SignUpView(APIView):
             user.is_active=False
             user.save()
             mail_subject = "Activate your user account."
-            message = render_to_string("template_activate_account.html", {
-                'user': user.username,
+            message = render_to_string("template_change_password.html", {
+                'user': user.first_name,
                 'domain': get_current_site(request).domain,
                 'uid': urlsafe_base64_encode(force_bytes(email)),
                 'token': account_activation_token.make_token(user),
@@ -104,7 +117,7 @@ class SignUpView(APIView):
                 print('Email not sent')
             return Response({'Success': True,'Message': "Account Created Successfully"})
       
-class ChangePassword(APIView):
+class UpdatePassword(APIView):
     def post(self,request):
         email=request.data.get('email')
         try:
@@ -118,5 +131,16 @@ class ChangePassword(APIView):
                 "protocol": 'https' if request.is_secure() else 'http'
             })
             email = EmailMessage(mail_subject, message, to=[email])
+            if email.send():
+                print(f"Email sent for {email}")
+            else:
+                print(f'Email not sent for {email}')
         except AppUser.DoesNotExist:
             return Response({'Success':False,'Message':'Email is not registered'})
+
+class changePassword(APIView):
+    def post(self,request):
+        User=get_user_model()
+        email=request.data.get('email')
+        try:
+            
