@@ -102,9 +102,11 @@ class SignUpView(APIView):
                                           first_name=first_name,last_name=last_name,institution=institution,sector=sector,role=role)
             user.is_active=False
             user.save()
+            appUser=AppUser.objects.get(email=email)
             mail_subject = "Activate your user account."
-            message = render_to_string("template_change_password.html", {
-                'user': user.first_name,
+            message = render_to_string("template_activate_account.html", {
+                'first_name': first_name,
+                'last_name':last_name, 
                 'domain': get_current_site(request).domain,
                 'uid': urlsafe_base64_encode(force_bytes(email)),
                 'token': account_activation_token.make_token(user),
@@ -122,9 +124,9 @@ class UpdatePassword(APIView):
         email=request.data.get('email')
         try:
             user=AppUser.objects.get(email=email)
-            mail_subject = "Activate your user account."
-            message = render_to_string("template_activate_account.html", {
-                'user': user.username,
+            mail_subject = "Reset Your Password." 
+            message = render_to_string("template_change_password.html", {
+                'user': user,
                 'domain': get_current_site(request).domain,
                 'uid': urlsafe_base64_encode(force_bytes(email)),
                 'token': account_activation_token.make_token(user),
@@ -133,8 +135,11 @@ class UpdatePassword(APIView):
             email = EmailMessage(mail_subject, message, to=[email])
             if email.send():
                 print(f"Email sent for {email}")
+                return Response({'Success':True,'Message':'Check your email for a verification alert'})
             else:
                 print(f'Email not sent for {email}')
+                return Response({'Success':False,'Message':'Trouble sending email. Make sure you have entered a valid email.'})
+            
         except AppUser.DoesNotExist:
             return Response({'Success':False,'Message':'Email is not registered'})
 
@@ -142,5 +147,10 @@ class changePassword(APIView):
     def post(self,request):
         User=get_user_model()
         email=request.data.get('email')
+        password=request.data.get('password')
         try:
-            
+            user=User.objects.get(email=email)
+            user.set_password(password)
+            return Response({'Success':True,'Message':'Password Changed Successfully'})
+        except User.DoesNotExist:
+            return Response({'Success':False,'Message':'Email not recognized'})
