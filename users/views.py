@@ -71,7 +71,7 @@ class LoginView(APIView):
                         print("Email sent")
                     else:
                         print('Email not sent')
-                    return Response({'Success':False,'Message':'Your email has not been verified.Check your email for a verification message'})
+                    return Response({'Success':False,'Message':'Your email has not been verified. Check your email for a verification message'})
             else:
                 return Response({'Success':False,'Message': 'Email and Password do not match'})
         except AppUser.DoesNotExist:
