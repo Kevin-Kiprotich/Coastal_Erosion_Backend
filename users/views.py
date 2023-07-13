@@ -55,6 +55,22 @@ class LoginView(APIView):
                         'access_token': str(access_token),
                     })
                 else:
+                    mail_subject = "Activate your user account."
+                    message = render_to_string("template_activate_account.html", {
+                        'first_name': user.first_name,
+                        'last_name':user.last_name,
+                        'domain': get_current_site(request).domain,
+                        'uid': urlsafe_base64_encode(force_bytes(email)),
+                        'token': account_activation_token.make_token(user),
+                        "protocol": 'https' if request.is_secure() else 'http'
+                    })
+                    email = EmailMessage(mail_subject, message, to=[email])
+                    email.content_subtype = 'html'  # Set the content type to HTML
+                    # email.attach_alternative(message, 'text/html')
+                    if email.send():
+                        print("Email sent")
+                    else:
+                        print('Email not sent')
                     return Response({'Success':False,'Message':'Your email has not been verified.Check your email for a verification message'})
             else:
                 return Response({'Success':False,'Message': 'Email and Password do not match'})
