@@ -157,5 +157,7 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'kipchirchirkevin012@gmail.com'
 EMAIL_HOST_PASSWORD ='bkaiobxqvdfilxry'
 
+DEFAULT_FROM_EMAIL = 'noreply<cogeos@locateit.co.ke>'
+EXPIRE_AFTER = "1h"
 
 

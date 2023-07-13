@@ -20,7 +20,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string 
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage,EmailMultiAlternatives
 from django.contrib import messages
 import os
 from .models import AppUser
@@ -82,7 +82,7 @@ def update(request,uidb64,token):
     except:
         user=None
     if user is not None and account_activation_token.check_token(user, token):
-        return redirect('https://www.google.com')
+        return redirect('https://www.instagram.com')
 
 
 class SignUpView(APIView):
@@ -113,6 +113,8 @@ class SignUpView(APIView):
                 "protocol": 'https' if request.is_secure() else 'http'
             })
             email = EmailMessage(mail_subject, message, to=[email])
+            email.content_subtype = 'html'  # Set the content type to HTML
+            # email.attach_alternative(message, 'text/html')
             if email.send():
                 print("Email sent")
             else:
@@ -133,6 +135,9 @@ class UpdatePassword(APIView):
                 "protocol": 'https' if request.is_secure() else 'http'
             })
             email = EmailMessage(mail_subject, message, to=[email])
+            email.content_subtype = 'html'  # Set the content type to HTML
+            # email.attach_alternative(message, 'text/html')
+            # email = EmailMultiAlternatives(mail_subject, message, to=[email])
             if email.send():
                 print(f"Email sent for {email}")
                 return Response({'Success':True,'Message':'Check your email for a verification alert'})
