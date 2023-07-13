@@ -48,11 +48,14 @@ class LoginView(APIView):
                 access_token = refresh.access_token
                 access_token.payload.update(payload)
                 # return Response({'Success':True,'Message':"Login Successfull",'first_name':user.first_name,'last_name':user.last_name,'email':user.email})
-                return Response({
-                    'Success': True,
-                    'Message': 'Login successful',
-                    'access_token': str(access_token),
-                })
+                if user.is_active:
+                    return Response({
+                        'Success': True,
+                        'Message': 'Login successful',
+                        'access_token': str(access_token),
+                    })
+                else:
+                    return Response({'Success':False,'Message':'Your email has not been verified.Check your email for a verification message'})
             else:
                 return Response({'Success':False,'Message': 'Email and Password do not match'})
         except AppUser.DoesNotExist:
