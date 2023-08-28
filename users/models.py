@@ -22,3 +22,13 @@ class AppUser(AbstractUser):
     class Meta:
         app_label="users"
         verbose_name_plural="Users"
+
+class countryStats(models.Model):
+    country=models.CharField(max_length=100,null=False)
+    country_code=models.CharField(max_length=100,null=False)
+    users=models.CharField(max_length=100,null=False)
+
+    def __str__(self):
+        return f"{self.country}"
+    class Meta:
+        verbose_name_plural="Stats By Country"
