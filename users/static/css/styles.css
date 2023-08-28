@@ -8,6 +8,26 @@ header{
     width:100vw;
     display:flex;
     flex-direction:row;
+    justify-content:space-between;
+    align-content:center;
     align-items:center;
     background-color:#D9D9D9;
+    margin-bottom:0.5vh;
+}
+
+header .logos{
+    height:100%;
+    display:flex;
+}
+
+.logos img{
+    height:95%;
+    width:auto;
+    margin-right:20px;
+    background-color:#ffffff;
+}
+
+#map{
+    height:93.5vh;
+    width:100vw;
 }
