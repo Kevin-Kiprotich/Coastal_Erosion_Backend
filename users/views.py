@@ -178,3 +178,8 @@ class changePassword(APIView):
             return Response({'Success':True,'Message':'Password Changed Successfully'})
         except User.DoesNotExist:
             return Response({'Success':False,'Message':'Email not recognized'})
+
+
+def userStatistics(request):
+    template=loader.get_template('userStats.html')
+    return HttpResponse(template.render())
