@@ -88,7 +88,7 @@ def activate(request,uidb64,token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-
+        
         # messages.success(request, "Thank you for your email confirmation. Now you can login your account.")
         return redirect('https://www.google.com')
 def update(request,uidb64,token):
@@ -122,6 +122,9 @@ class SignUpView(APIView):
                                           first_name=first_name,last_name=last_name,institution=institution,sector=sector,role=role,country=country)
             user.is_active=False
             user.save()
+            country=countryStats.objects.get_or_create(country=user.country)
+            country.users+=1
+            country.save()
             appUser=AppUser.objects.get(email=email)
             mail_subject = "Activate your user account."
             message = render_to_string("template_activate_account.html", {
