@@ -12,7 +12,7 @@ class AppUser(AbstractUser):
     institution=models.CharField(max_length=255,null=False)
     sector=models.CharField(max_length=40,null=False)
     role=models.CharField(max_length=255)
-    
+    country=models.CharField(max_length=100,null=False, default='Kenya')
     USERNAME_FIELD='email'
     REQUIRED_FIELDS=[]
 
@@ -25,10 +25,8 @@ class AppUser(AbstractUser):
 
 class countryStats(models.Model):
     country=models.CharField(max_length=100,null=False)
-    country_code=models.CharField(max_length=100,null=False)
-    users=models.CharField(max_length=100,null=False)
-
+    users=models.IntegerField(null=False,default=0)
     def __str__(self):
         return f"{self.country}"
     class Meta:
-        verbose_name_plural="Stats By Country"
+        verbose_name_plural="Country Statistics"

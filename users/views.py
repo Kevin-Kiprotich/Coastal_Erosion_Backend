@@ -23,7 +23,7 @@ from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage,EmailMultiAlternatives
 from django.contrib import messages
 import os
-from .models import AppUser
+from .models import AppUser,countryStats
 
 userEmail=''
 class LoginView(APIView):
@@ -112,13 +112,14 @@ class SignUpView(APIView):
         institution=request.data.get('institution')
         sector=request.data.get('sector')
         role=request.data.get('role')
+        country=request.data.get('country')
         password=request.data.get('password')
         try:
             user=AppUser.objects.get(email=email)
             return Response({'Success':False,'Message':"The email is already taken"})
         except AppUser.DoesNotExist:
             user=AppUser.objects.create_user(email=email, password=password,
-                                          first_name=first_name,last_name=last_name,institution=institution,sector=sector,role=role)
+                                          first_name=first_name,last_name=last_name,institution=institution,sector=sector,role=role,country=country)
             user.is_active=False
             user.save()
             appUser=AppUser.objects.get(email=email)
