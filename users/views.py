@@ -122,9 +122,14 @@ class SignUpView(APIView):
                                           first_name=first_name,last_name=last_name,institution=institution,sector=sector,role=role,country=country)
             user.is_active=False
             user.save()
-            country=countryStats.objects.get_or_create(country=user.country)
-            country.users+=1
-            country.save()
+            try:
+                country=countryStats.objects.get(country=user.country)
+                country.users+=1
+                country.save()
+            except countryStats.DoesNotExist:
+                country=countryStats(country=user.country,users=1)
+                country.save()
+
             appUser=AppUser.objects.get(email=email)
             mail_subject = "Activate your user account."
             message = render_to_string("template_activate_account.html", {
