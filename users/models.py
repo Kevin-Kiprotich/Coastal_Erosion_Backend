@@ -19,6 +19,15 @@ class AppUser(AbstractUser):
     objects=CustomUserManager()
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+    # def delete(self, *args,**kwargs):
+    #     user_country=self.country
+    #     super.delete(*args,**kwargs)
+    #     try:
+    #         country=countryStats.objects.get(country=user_country)
+    #         country.users-=1
+    #         country.save()
+    #     except countryStats.DoesNotExist:
+    #         pass
     class Meta:
         app_label="users"
         verbose_name_plural="Users"
