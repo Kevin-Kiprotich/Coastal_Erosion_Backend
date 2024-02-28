@@ -86,9 +86,9 @@ WSGI_APPLICATION = "coastal_erosion.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "postgres",
+        "NAME": "CoGEOS",
         "USER": "kevin",
-        "PASSWORD":"postgres",
+        "PASSWORD":"postgreskev",
         "HOST":"localhost",
         "PORT":'5432'
     }
@@ -126,7 +126,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "static/"
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -156,11 +156,11 @@ REST_FRAMEWORK = {
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'mail.locateit.co.ke'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'kipchirchirkevin012@gmail.com'
-EMAIL_HOST_PASSWORD ='bkaiobxqvdfilxry'
+EMAIL_HOST_USER = 'cogeos@locateit.co.ke'
+EMAIL_HOST_PASSWORD ='cogeos@2023'
 
 DEFAULT_FROM_EMAIL = 'noreply<cogeos@locateit.co.ke>'
 EXPIRE_AFTER = "1h"

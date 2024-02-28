@@ -1,8 +1,6 @@
 import json
 import uuid
 from django.contrib.auth import authenticate,get_user_model
-from django.http import JsonResponse
-from django.views import View
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template import loader
@@ -14,13 +12,12 @@ from rest_framework.response import Response
 from django.conf import settings
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import login
-from verify_email.email_handler import send_verification_email
 from .tokens import account_activation_token
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string 
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
-from django.core.mail import EmailMessage,EmailMultiAlternatives
+from django.core.mail import EmailMessage
 from django.contrib import messages
 import os
 from .models import AppUser,countryStats
@@ -90,7 +87,7 @@ def activate(request,uidb64,token):
         user.save()
         
         # messages.success(request, "Thank you for your email confirmation. Now you can login your account.")
-        return redirect('https://www.google.com')
+        return redirect('http://coastalerosion.rcmrd.org/#/login')
 def update(request,uidb64,token):
     User=get_user_model()
     try:
@@ -101,7 +98,7 @@ def update(request,uidb64,token):
     except:
         user=None
     if user is not None and account_activation_token.check_token(user, token):
-        return redirect('https://www.instagram.com')
+        return redirect('http://www.instagram.com')
 
 
 class SignUpView(APIView):
