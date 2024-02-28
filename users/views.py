@@ -98,7 +98,7 @@ def update(request,uidb64,token):
     except:
         user=None
     if user is not None and account_activation_token.check_token(user, token):
-        return redirect('http://www.instagram.com')
+        return redirect(f'http://217.21.122.249/#/update-password#access_token={uidb64}')
 
 
 class SignUpView(APIView):
