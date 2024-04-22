@@ -6,10 +6,11 @@ django-staticfiles==1.2.1
 Django-Verify-Email==2.0.3
 djangorestframework==3.14.0
 djangorestframework-simplejwt==5.2.2
+psycopg2==2.9.9
 PyJWT==2.7.0
 pytz==2023.3
-setuptools==69.0.3
 six==1.16.0
 sqlparse==0.4.4
+typing_extensions==4.11.0
 tzdata==2023.3
 whitenoise==6.6.0

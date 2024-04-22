@@ -20,6 +20,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
 from django.contrib import messages
+from django.contrib.auth.models import auth
 from django.http import JsonResponse,HttpResponse, HttpResponseBadRequest,HttpResponseForbidden
 import os
 from .models import AppUser,countryStats
@@ -52,6 +53,7 @@ class LoginView(APIView):
                 access_token.payload.update(payload)
                 # return Response({'Success':True,'Message':"Login Successfull",'first_name':user.first_name,'last_name':user.last_name,'email':user.email})
                 if user.is_active:
+                    auth.login(request,user)
                     return Response({
                         'Success': True,
                         'Message': 'Login successful',
@@ -74,12 +76,13 @@ class LoginView(APIView):
                         print("Email sent")
                     else:
                         print('Email not sent')
-                    return HttpResponseBadRequest(JsonResponse({'message':'Email is not valid'}))
+                        return HttpResponseBadRequest(JsonResponse({'message':'Email is not valid'}))
+                    
             else:
 
                 return HttpResponseBadRequest(JsonResponse({'message':'Email and Password do not match'}))
         except AppUser.DoesNotExist:
-            return HttpResponseBadRequest((JsonResponse({'message':'Email is not registered. Register an account '})))
+            return HttpResponseBadRequest((JsonResponse({'message':'Email is not registered. Register an account to proceed.'})))
 def activate(request,uidb64,token):
     User=get_user_model()
     try:
@@ -95,6 +98,8 @@ def activate(request,uidb64,token):
         
         # messages.success(request, "Thank you for your email confirmation. Now you can login your account.")
         return redirect('http://coastalerosion.rcmrd.org/#/login')
+    
+
 def update(request,uidb64,token):
     User=get_user_model()
     try:
@@ -102,10 +107,13 @@ def update(request,uidb64,token):
         print(uid)
         user = User.objects.get(email=uid)
         print(user)
+        
+        userEmail=user.email
+        print(userEmail)
     except:
         user=None
     if user is not None and account_activation_token.check_token(user, token):
-        return redirect(f'http://217.21.122.249/#/update-password#access_token={uidb64}')
+        return redirect(f'http://192.168.1.50:8080/#/update-password?access_token={token}&uid={uidb64}')
 
 
 class SignUpView(APIView):
@@ -133,7 +141,7 @@ class SignUpView(APIView):
         print(userobject)
         try:
             user=AppUser.objects.get(email=email)
-            return Response({'Success':False,'Message':"The email is already taken",'email':email})
+            return HttpResponseBadRequest(JsonResponse({'Success':False,'message':"The email is already taken",'email':email}))
         except AppUser.DoesNotExist:
             user=""
             if not otherroles:
@@ -171,7 +179,7 @@ class SignUpView(APIView):
                 print("Email sent")
             else:
                 print('Email not sent')
-            return Response({'Success': True,'Message': "Account Created Successfully",'user':userobject})
+            return Response({'Success': True,'message': "Account Created Successfully",'user':userobject})
       
 class UpdatePassword(APIView):
     def post(self,request):
@@ -203,14 +211,23 @@ class UpdatePassword(APIView):
 class changePassword(APIView):
     def post(self,request):
         User=get_user_model()
-        email=request.data.get('email')
+        # email=request.data.get('email')
+        token=request.data.get('token')
+        uidb64=request.data.get('uid')
         password=request.data.get('password')
+        uid=force_str(urlsafe_base64_decode(uidb64))
+        
+        print(uid)
+        print(password)
+        
         try:
-            user=User.objects.get(email=email)
+            user=User.objects.get(email=uid)
             user.set_password(password)
+            user.save()
+            print('passoword changed')
             return Response({'Success':True,'Message':'Password Changed Successfully'})
         except User.DoesNotExist:
-            return Response({'Success':False,'Message':'Email not recognized'})
+            return HttpResponseBadRequest(JsonResponse({'Success':False,'Message':'Email not recognized'}))
 
 
 def userStatistics(request):
@@ -221,10 +238,9 @@ def userStatistics(request):
 class LogoutView(APIView):
     def post(self,request):
         email=request.data.get('email')
-
-        try:
-            user=AppUser.objects.get(email=email)
-            user.logout()
-            user.save()
-        except AppUser.DoesNotExist:
-            return Response({'Success':True,'Message':"User does not exist"})
+        auth.logout(request)
+        return Response({
+                        'Success': True,
+                        'Message': 'Login successful',
+                        'metadata': {},
+                    })

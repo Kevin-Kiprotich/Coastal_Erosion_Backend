@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-79u!%+z7v!v@hy3_f!o1nc!&!%jyybck8kd6q-l_y16f1ez1hi
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1','217.21.122.249','192.168.1.25','192.168.100.99','192.168.1.31']
+ALLOWED_HOSTS = ['localhost','127.0.0.1','217.21.122.249','192.168.1.25','192.168.100.99','192.168.1.2 8']
 
 
 # Application definition
@@ -84,18 +84,18 @@ WSGI_APPLICATION = "coastal_erosion.wsgi.application"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    # "default": {
-    #     "ENGINE": "django.db.backends.postgresql",
-    #     "NAME": "CoGEOS",
-    #     "USER": "kevin",
-    #     "PASSWORD":"postgreskev",
-    #     "HOST":"localhost",
-    #     "PORT":'5432'
-    # }
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / "db.sqlite3",
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "postgres",
+        "USER": "postgres",
+        "PASSWORD":"your-super-secret-and-long-postgres-password",
+        "HOST":"217.21.122.249",
+        "PORT":'5432'
     }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / "db.sqlite3",
+    # }
 }
 
 
