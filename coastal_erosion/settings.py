@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-79u!%+z7v!v@hy3_f!o1nc!&!%jyybck8kd6q-l_y16f1ez1hi
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1','217.21.122.249']
+ALLOWED_HOSTS = ['localhost','127.0.0.1','217.21.122.249','192.168.1.25','192.168.100.99','192.168.1.31']
 
 
 # Application definition
@@ -84,13 +84,17 @@ WSGI_APPLICATION = "coastal_erosion.wsgi.application"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "CoGEOS",
-        "USER": "kevin",
-        "PASSWORD":"postgreskev",
-        "HOST":"localhost",
-        "PORT":'5432'
+    # "default": {
+    #     "ENGINE": "django.db.backends.postgresql",
+    #     "NAME": "CoGEOS",
+    #     "USER": "kevin",
+    #     "PASSWORD":"postgreskev",
+    #     "HOST":"localhost",
+    #     "PORT":'5432'
+    # }
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / "db.sqlite3",
     }
 }
 
@@ -132,11 +136,11 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-CSRF_TRUSTED_ORIGINS=["http://localhost:8000/","http://127.0.0.1:8000/","http://192.168.1.32:8000/"]
+CSRF_TRUSTED_ORIGINS=["http://localhost:8000/","http://127.0.0.1:8000/","http://192.168.1.32:8000/","http://192.168.100.69:8080/","http://192.168.100.99:8000/"]
 
 
 CORS_ORIGIN_WHITELIST=[
-   "http://localhost:3000",'http://localhost:8000',"http://192.168.1.32:8000"
+   "http://localhost:3000",'http://localhost:8000',"http://192.168.1.32:8000","http://192.168.100.69:8080","http://192.168.100.99:8000","http://192.168.1.50:8080"
 ]
 
 
@@ -157,7 +161,7 @@ REST_FRAMEWORK = {
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'mail.locateit.co.ke'
-EMAIL_USE_TLS = True
+EMAIL_USE_TLS = False
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'cogeos@locateit.co.ke'
 EMAIL_HOST_PASSWORD ='cogeos@2023'

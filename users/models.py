@@ -8,11 +8,11 @@ from .managers import CustomUserManager
 # Create your models here.
 class AppUser(AbstractUser):
     username=None
-    email=models.EmailField(_("email address"),unique=True)
-    institution=models.CharField(max_length=255,null=False)
-    sector=models.CharField(max_length=40,null=False)
-    role=models.CharField(max_length=255)
-    country=models.CharField(max_length=100,null=False, default='Kenya')
+    email=models.EmailField(_("email address"),unique=True,null=False)
+    institution=models.CharField(max_length=255,null=True)
+    sector=models.CharField(max_length=40,null=True)
+    role=models.CharField(max_length=255,null=True)
+    country=models.CharField(max_length=100,null=True, default='Kenya')
     USERNAME_FIELD='email'
     REQUIRED_FIELDS=[]
 

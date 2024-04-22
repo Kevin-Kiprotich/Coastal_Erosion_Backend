@@ -9,6 +9,7 @@ from django.utils.decorators import method_decorator
 from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
 from django.conf import settings
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import login
@@ -19,6 +20,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
 from django.contrib import messages
+from django.http import JsonResponse,HttpResponse, HttpResponseBadRequest,HttpResponseForbidden
 import os
 from .models import AppUser,countryStats
 
@@ -27,6 +29,7 @@ class LoginView(APIView):
     def post(self, request):
         email = request.data.get('email')
         password = request.data.get('password')
+        print(email)
         try:
             user = AppUser.objects.get(email=email)
             if user.check_password(password):
@@ -36,11 +39,14 @@ class LoginView(APIView):
                 # access_token=str(refresh.access_token)
                 payload={
                     'email':user.email,
-                    'first_name':user.first_name,
-                    'last_name':user.last_name,
-                    'institution':user.institution,
-                    'sector':user.sector,
-                    'role':user.role,
+                    'user_metadata':{
+                        'firstName':user.first_name,
+                        'lastName':user.last_name,
+                        'institution':user.institution,
+                        'sector':user.sector,
+                        'role':user.role,
+                        'country':user.country 
+                    } 
                 }
                 access_token = refresh.access_token
                 access_token.payload.update(payload)
@@ -49,7 +55,7 @@ class LoginView(APIView):
                     return Response({
                         'Success': True,
                         'Message': 'Login successful',
-                        'access_token': str(access_token),
+                        'metadata': payload,
                     })
                 else:
                     mail_subject = "Activate your user account."
@@ -68,11 +74,12 @@ class LoginView(APIView):
                         print("Email sent")
                     else:
                         print('Email not sent')
-                    return Response({'Success':False,'Message':'Your email has not been verified. Check your email for a verification message'})
+                    return HttpResponseBadRequest(JsonResponse({'message':'Email is not valid'}))
             else:
-                return Response({'Success':False,'Message': 'Email and Password do not match'})
+
+                return HttpResponseBadRequest(JsonResponse({'message':'Email and Password do not match'}))
         except AppUser.DoesNotExist:
-            return Response({'Success':False,'Message':"The email is not registered"})
+            return HttpResponseBadRequest((JsonResponse({'message':'Email is not registered. Register an account '})))
 def activate(request,uidb64,token):
     User=get_user_model()
     try:
@@ -109,25 +116,44 @@ class SignUpView(APIView):
         institution=request.data.get('institution')
         sector=request.data.get('sector')
         role=request.data.get('role')
+        otherroles=request.data.get('other_roles')
         country=request.data.get('country')
         password=request.data.get('password')
+        userobject={
+            'first_name':first_name,
+            'last_name':last_name,
+            'email':email,
+            'institution':institution,
+            'sector':sector,
+            'role':role,
+            'otherroles':otherroles,
+            'country':country,
+            'password':password
+        }
+        print(userobject)
         try:
             user=AppUser.objects.get(email=email)
-            return Response({'Success':False,'Message':"The email is already taken"})
+            return Response({'Success':False,'Message':"The email is already taken",'email':email})
         except AppUser.DoesNotExist:
-            user=AppUser.objects.create_user(email=email, password=password,
+            user=""
+            if not otherroles:
+                user=AppUser.objects.create_user(email=email, password=password,
                                           first_name=first_name,last_name=last_name,institution=institution,sector=sector,role=role,country=country)
+                
+            else:
+                user=AppUser.objects.create_user(email=email, password=password,
+                                          first_name=first_name,last_name=last_name,institution=institution,sector=sector,role=otherroles,country=country)
             user.is_active=False
             user.save()
-            try:
-                country=countryStats.objects.get(country=user.country)
-                country.users+=1
-                country.save()
-            except countryStats.DoesNotExist:
-                country=countryStats(country=user.country,users=1)
-                country.save()
+            print(user.email)
+            # try:
+            #     country=countryStats.objects.get(country=user.country)
+            #     country.users+=1
+            #     country.save()
+            # except countryStats.DoesNotExist:
+            #     country=countryStats(country=user.country,users=1)
+            #     country.save()
 
-            appUser=AppUser.objects.get(email=email)
             mail_subject = "Activate your user account."
             message = render_to_string("template_activate_account.html", {
                 'first_name': first_name,
@@ -140,11 +166,12 @@ class SignUpView(APIView):
             email = EmailMessage(mail_subject, message, to=[email])
             email.content_subtype = 'html'  # Set the content type to HTML
             # email.attach_alternative(message, 'text/html')
+            print('sending message')
             if email.send():
                 print("Email sent")
             else:
                 print('Email not sent')
-            return Response({'Success': True,'Message': "Account Created Successfully"})
+            return Response({'Success': True,'Message': "Account Created Successfully",'user':userobject})
       
 class UpdatePassword(APIView):
     def post(self,request):
@@ -189,3 +216,15 @@ class changePassword(APIView):
 def userStatistics(request):
     template=loader.get_template('userStats.html')
     return HttpResponse(template.render())
+
+
+class LogoutView(APIView):
+    def post(self,request):
+        email=request.data.get('email')
+
+        try:
+            user=AppUser.objects.get(email=email)
+            user.logout()
+            user.save()
+        except AppUser.DoesNotExist:
+            return Response({'Success':True,'Message':"User does not exist"})
