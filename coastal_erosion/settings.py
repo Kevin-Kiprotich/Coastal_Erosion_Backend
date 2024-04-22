@@ -89,7 +89,7 @@ DATABASES = {
         "NAME": "postgres",
         "USER": "postgres",
         "PASSWORD":"your-super-secret-and-long-postgres-password",
-        "HOST":"217.21.122.249",
+        "HOST":"localhost",
         "PORT":'5432'
     }
     # 'default': {
