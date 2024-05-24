@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-79u!%+z7v!v@hy3_f!o1nc!&!%jyybck8kd6q-l_y16f1ez1hi
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1','217.21.122.249','192.168.1.25','192.168.100.99','192.168.1.2 8']
+ALLOWED_HOSTS = ['localhost','coastalerosion.rcmrd.org','127.0.0.1','217.21.122.249','192.168.1.25','192.168.100.99','192.168.1.2 8']
 
 
 # Application definition
@@ -140,10 +140,10 @@ CSRF_TRUSTED_ORIGINS=["http://localhost:8000/","http://127.0.0.1:8000/","http://
 
 
 CORS_ORIGIN_WHITELIST=[
-   "http://localhost:3000",'http://localhost:8000',"http://192.168.1.32:8000","http://192.168.100.69:8080","http://192.168.100.99:8000","http://192.168.1.50:8080"
+   "http://localhost:3000",'http://localhost:8000',"http://192.168.1.32:8000","http://192.168.100.69:8080","http://192.168.100.99:8000","http://192.168.1.50:8080","http://coastalerosion.rcmrd.org","http://217.21.122.249"
 ]
 
-
+CORS_ALLOW_ALL_ORIGINS=True
 SIMPLLE_JWT = {
     "ACCESS_TOKEN_LIFETIME":datetime.timedelta(minutes=5),
     "REFRESH_TOKEN_LIFETIME":datetime.timedelta(days=1),

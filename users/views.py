@@ -69,11 +69,12 @@ class LoginView(APIView):
                         'token': account_activation_token.make_token(user),
                         "protocol": 'https' if request.is_secure() else 'http'
                     })
-                    email = EmailMessage(mail_subject, message, to=[email])
-                    email.content_subtype = 'html'  # Set the content type to HTML
+                    mail = EmailMessage(mail_subject, message, to=[email])
+                    mail.content_subtype = 'html'  # Set the content type to HTML
                     # email.attach_alternative(message, 'text/html')
-                    if email.send():
+                    if mail.send():
                         print("Email sent")
+			HttpResponseBadRequest(JsonResponse({'message':'Your email is not verified. Check your email to activate your account'})
                     else:
                         print('Email not sent')
                         return HttpResponseBadRequest(JsonResponse({'message':'Email is not valid'}))
@@ -113,7 +114,7 @@ def update(request,uidb64,token):
     except:
         user=None
     if user is not None and account_activation_token.check_token(user, token):
-        return redirect(f'http://192.168.1.50:8080/#/update-password?access_token={token}&uid={uidb64}')
+        return redirect(f'http://217.21.122.249/#/update-password?access_token={token}&uid={uidb64}')
 
 
 class SignUpView(APIView):
@@ -171,15 +172,16 @@ class SignUpView(APIView):
                 'token': account_activation_token.make_token(user),
                 "protocol": 'https' if request.is_secure() else 'http'
             })
-            email = EmailMessage(mail_subject, message, to=[email])
-            email.content_subtype = 'html'  # Set the content type to HTML
+            mail = EmailMessage(mail_subject, message, to=[email])
+            mail.content_subtype = 'html'  # Set the content type to HTML
             # email.attach_alternative(message, 'text/html')
             print('sending message')
-            if email.send():
+            if mail.send():
                 print("Email sent")
+		return Response({'Success': True,'message': "Account Created Successfully",'user':userobject})
             else:
                 print('Email not sent')
-            return Response({'Success': True,'message': "Account Created Successfully",'user':userobject})
+		HttpResponseBadRequest(JsonResponse({'message':'Could not send a verification email. Make sure you entered a valid email'})
       
 class UpdatePassword(APIView):
     def post(self,request):
@@ -203,10 +205,10 @@ class UpdatePassword(APIView):
                 return Response({'Success':True,'Message':'Check your email for a verification alert'})
             else:
                 print(f'Email not sent for {email}')
-                return Response({'Success':False,'Message':'Trouble sending email. Make sure you have entered a valid email.'})
+                return HttpResponseBadRequest(JsonResponse({'Success':False,'Message':'Trouble sending email. Make sure you have entered a valid email.'}))
             
         except AppUser.DoesNotExist:
-            return Response({'Success':False,'Message':'Email is not registered'})
+            return HttpResponseBadRequest(JsonResponse({'Success':False,'Message':'Email is not registered'}))
 
 class changePassword(APIView):
     def post(self,request):
@@ -224,8 +226,19 @@ class changePassword(APIView):
             user=User.objects.get(email=uid)
             user.set_password(password)
             user.save()
+            payload={
+                    'email':user.email,
+                    'user_metadata':{
+                        'firstName':user.first_name,
+                        'lastName':user.last_name,
+                        'institution':user.institution,
+                        'sector':user.sector,
+                        'role':user.role,
+                        'country':user.country
+                    }
+                }
             print('passoword changed')
-            return Response({'Success':True,'Message':'Password Changed Successfully'})
+            return Response({'Success':True,'Message':'Password Changed Successfully','metadata':payload })
         except User.DoesNotExist:
             return HttpResponseBadRequest(JsonResponse({'Success':False,'Message':'Email not recognized'}))
 
