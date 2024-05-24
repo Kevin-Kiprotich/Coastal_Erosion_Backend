@@ -74,13 +74,12 @@ class LoginView(APIView):
                     # email.attach_alternative(message, 'text/html')
                     if mail.send():
                         print("Email sent")
-			HttpResponseBadRequest(JsonResponse({'message':'Your email is not verified. Check your email to activate your account'})
+			            HttpResponseBadRequest(JsonResponse({'message':'Your email is not verified. Check your email to activate your account'}))
                     else:
                         print('Email not sent')
                         return HttpResponseBadRequest(JsonResponse({'message':'Email is not valid'}))
                     
             else:
-
                 return HttpResponseBadRequest(JsonResponse({'message':'Email and Password do not match'}))
         except AppUser.DoesNotExist:
             return HttpResponseBadRequest((JsonResponse({'message':'Email is not registered. Register an account to proceed.'})))
@@ -178,10 +177,10 @@ class SignUpView(APIView):
             print('sending message')
             if mail.send():
                 print("Email sent")
-		return Response({'Success': True,'message': "Account Created Successfully",'user':userobject})
+		        return Response({'Success': True,'message': "Account Created Successfully",'user':userobject})
             else:
                 print('Email not sent')
-		HttpResponseBadRequest(JsonResponse({'message':'Could not send a verification email. Make sure you entered a valid email'})
+		        HttpResponseBadRequest(JsonResponse({'message':'Could not send a verification email. Make sure you entered a valid email'}))
       
 class UpdatePassword(APIView):
     def post(self,request):
