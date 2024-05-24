@@ -74,7 +74,7 @@ class LoginView(APIView):
                     # email.attach_alternative(message, 'text/html')
                     if mail.send():
                         print("Email sent")
-                        HttpResponseBadRequest(JsonResponse({'message':'Your email is not verified. Check your email to activate your account'}))
+                        return HttpResponseBadRequest(JsonResponse({'message':'Your email is not verified. Check your email to activate your account'}))
                     else:
                         print('Email not sent')
                         return HttpResponseBadRequest(JsonResponse({'message':'Email is not valid'}))
@@ -180,7 +180,7 @@ class SignUpView(APIView):
                 return Response({'Success': True,'message': "Account Created Successfully",'user':userobject})
             else:
                 print('Email not sent')
-                HttpResponseBadRequest(JsonResponse({'message':'Could not send a verification email. Make sure you entered a valid email'}))
+                return HttpResponseBadRequest(JsonResponse({'message':'Could not send a verification email. Make sure you entered a valid email'}))
       
 class UpdatePassword(APIView):
     def post(self,request):
