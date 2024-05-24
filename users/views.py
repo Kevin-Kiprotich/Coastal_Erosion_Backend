@@ -74,7 +74,7 @@ class LoginView(APIView):
                     # email.attach_alternative(message, 'text/html')
                     if mail.send():
                         print("Email sent")
-			            HttpResponseBadRequest(JsonResponse({'message':'Your email is not verified. Check your email to activate your account'}))
+                        HttpResponseBadRequest(JsonResponse({'message':'Your email is not verified. Check your email to activate your account'}))
                     else:
                         print('Email not sent')
                         return HttpResponseBadRequest(JsonResponse({'message':'Email is not valid'}))
@@ -177,10 +177,10 @@ class SignUpView(APIView):
             print('sending message')
             if mail.send():
                 print("Email sent")
-		        return Response({'Success': True,'message': "Account Created Successfully",'user':userobject})
+                return Response({'Success': True,'message': "Account Created Successfully",'user':userobject})
             else:
                 print('Email not sent')
-		        HttpResponseBadRequest(JsonResponse({'message':'Could not send a verification email. Make sure you entered a valid email'}))
+                HttpResponseBadRequest(JsonResponse({'message':'Could not send a verification email. Make sure you entered a valid email'}))
       
 class UpdatePassword(APIView):
     def post(self,request):
@@ -195,11 +195,11 @@ class UpdatePassword(APIView):
                 'token': account_activation_token.make_token(user),
                 "protocol": 'https' if request.is_secure() else 'http'
             })
-            email = EmailMessage(mail_subject, message, to=[email])
-            email.content_subtype = 'html'  # Set the content type to HTML
+            mail = EmailMessage(mail_subject, message, to=[email])
+            mail.content_subtype = 'html'  # Set the content type to HTML
             # email.attach_alternative(message, 'text/html')
             # email = EmailMultiAlternatives(mail_subject, message, to=[email])
-            if email.send():
+            if mail.send():
                 print(f"Email sent for {email}")
                 return Response({'Success':True,'Message':'Check your email for a verification alert'})
             else:

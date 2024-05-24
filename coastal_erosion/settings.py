@@ -159,5 +159,3 @@ EMAIL_HOST_PASSWORD ='cogeos@2023'
 
 DEFAULT_FROM_EMAIL = 'noreply<cogeos@locateit.co.ke>'
 EXPIRE_AFTER = "1h"
-
-
