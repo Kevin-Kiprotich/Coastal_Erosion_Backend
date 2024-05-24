@@ -57,9 +57,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "coastal_erosion.urls"
-CORS_ORIGIN_WHITELIST = [
-     'http://localhost:3000'
-]
 
 TEMPLATES = [
     {
@@ -136,12 +133,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-CSRF_TRUSTED_ORIGINS=["http://localhost:8000/","http://127.0.0.1:8000/","http://192.168.1.32:8000/","http://192.168.100.69:8080/","http://192.168.100.99:8000/"]
-
-
-CORS_ORIGIN_WHITELIST=[
-   "http://localhost:3000",'http://localhost:8000',"http://192.168.1.32:8000","http://192.168.100.69:8080","http://192.168.100.99:8000","http://192.168.1.50:8080","http://coastalerosion.rcmrd.org","http://217.21.122.249"
-]
 
 CORS_ALLOW_ALL_ORIGINS=True
 SIMPLLE_JWT = {
