@@ -25,8 +25,8 @@ from django.conf import settings
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("",include('users.urls')),
-    path('verification/', include('verify_email.urls')),
+    path("api/",include('users.urls')),
+    path('api/verification/', include('verify_email.urls')),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
