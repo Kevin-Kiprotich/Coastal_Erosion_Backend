@@ -9,9 +9,10 @@ from django.utils.decorators import method_decorator
 from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from django.conf import settings
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from django.contrib.auth import login
 from .tokens import account_activation_token
 from django.contrib.sites.shortcuts import get_current_site
@@ -36,7 +37,8 @@ class LoginView(APIView):
             if user.check_password(password):
                 # login(user)
                 # serializer = UserSerializer(user)
-                refresh=RefreshToken.for_user(user)
+                access_token = AccessToken.for_user(user)
+                refresh_token=RefreshToken.for_user(user)
                 # access_token=str(refresh.access_token)
                 payload={
                     'email':user.email,
@@ -49,15 +51,16 @@ class LoginView(APIView):
                         'country':user.country 
                     } 
                 }
-                access_token = refresh.access_token
-                access_token.payload.update(payload)
+                # refresh_token = refresh.access_token
+                # refresh_token.payload.update(payload)
                 # return Response({'Success':True,'Message':"Login Successfull",'first_name':user.first_name,'last_name':user.last_name,'email':user.email})
                 if user.is_active:
                     auth.login(request,user)
                     return Response({
                         'Success': True,
-                        'Message': 'Login successful',
-                        'metadata': payload,
+                        'access_token':str(access_token),
+                        'refresh_token':str(refresh_token),
+                        'metadata':payload
                     })
                 else:
                     mail_subject = "Activate your user account."
@@ -245,6 +248,24 @@ class changePassword(APIView):
 def userStatistics(request):
     template=loader.get_template('userStats.html')
     return HttpResponse(template.render())
+
+
+class GetUser(APIView):
+    permission_classes = (IsAuthenticated,)
+    def get(self,request):
+        user = request.user
+        payload={
+                    'email':user.email,
+                    'user_metadata':{
+                        'firstName':user.first_name,
+                        'lastName':user.last_name,
+                        'institution':user.institution,
+                        'sector':user.sector,
+                        'role':user.role,
+                        'country':user.country 
+                    } 
+                }
+        return Response({'Success':True,'metadata':payload})
 
 
 class LogoutView(APIView):

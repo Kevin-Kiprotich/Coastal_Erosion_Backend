@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-79u!%+z7v!v@hy3_f!o1nc!&!%jyybck8kd6q-l_y16f1ez1hi"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['localhost','coastalerosion.rcmrd.org','127.0.0.1','217.21.122.249','192.168.1.25','192.168.100.99','192.168.1.2 8']
 
@@ -86,7 +86,7 @@ DATABASES = {
         "NAME": "postgres",
         "USER": "postgres",
         "PASSWORD":"your-super-secret-and-long-postgres-password",
-        "HOST":"localhost",
+        "HOST":"217.21.122.249",
         "PORT":'5432'
     }
     # 'default': {
@@ -136,7 +136,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CORS_ALLOW_ALL_ORIGINS=True
 SIMPLLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME":datetime.timedelta(minutes=5),
+    "ACCESS_TOKEN_LIFETIME":datetime.timedelta(days=7),
     "REFRESH_TOKEN_LIFETIME":datetime.timedelta(days=1),
     "UPDATE_LAST_LOGIN":True,
     "AUTH_HEADER_TYPES": ("Bearer",),
