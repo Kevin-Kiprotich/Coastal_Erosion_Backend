@@ -58,6 +58,7 @@ class LoginView(APIView):
                     auth.login(request,user)
                     response = Response({
                         'Success': True,
+                        'Message': 'Login successful',
                         'token': str(access_token),
                         'user_metadata':payload
                     })
