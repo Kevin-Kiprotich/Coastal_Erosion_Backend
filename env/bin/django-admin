@@ -1,4 +1,4 @@
-#!/opt/geoProject/env/bin/python3
+#!/opt/geoProject/env/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
