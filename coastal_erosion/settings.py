@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-79u!%+z7v!v@hy3_f!o1nc!&!%jyybck8kd6q-l_y16f1ez1hi"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['localhost','coastalerosion.rcmrd.org','127.0.0.1','217.21.122.249','192.168.1.25','192.168.100.99','192.168.1.2 8']
 
@@ -135,7 +135,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 CORS_ALLOW_ALL_ORIGINS=True
-SIMPLLE_JWT = {
+CSRF_TRUSTED_ORIGINS =['http://localhost:8000/']
+SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME":datetime.timedelta(days=7),
     "REFRESH_TOKEN_LIFETIME":datetime.timedelta(days=1),
     "UPDATE_LAST_LOGIN":True,
@@ -144,8 +145,7 @@ SIMPLLE_JWT = {
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-       'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
+       'users.authenticate.CustomAuthentication',
         #'rest_framework.authentication.SessionAuthentication',
     ]
 }

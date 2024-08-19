@@ -59,9 +59,17 @@ class LoginView(APIView):
                     response = Response({
                         'Success': True,
                         'Message': 'Login successful',
-                        'token': str(access_token),
                         'metadata':payload
                     })
+
+                    response.set_cookie(
+                        key='access_token',
+                        value=str(access_token),
+                        expires=settings.SIMPLE_JWT["ACCESS_TOKEN_LIFETIME"],
+                        secure=True,
+                        httponly=True,
+                        samesite='Lax'
+                    )
                     return response
                 else:
                     mail_subject = "Activate your user account."
@@ -270,11 +278,15 @@ class GetUser(APIView):
 
 
 class LogoutView(APIView):
+    permission_classes = (IsAuthenticated,)
     def post(self,request):
-        email=request.data.get('email')
-        auth.logout(request)
-        return Response({
+        # auth.logout(request)
+        response = Response({
                         'Success': True,
                         'Message': 'Login successful',
                         'metadata': {},
                     })
+        response.delete_cookie('access_token')
+
+        return response
+        
