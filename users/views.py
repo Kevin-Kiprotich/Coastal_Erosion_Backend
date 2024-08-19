@@ -60,11 +60,8 @@ class LoginView(APIView):
                         'Success': True,
                         'Message': 'Login successful',
                         'token': str(access_token),
-                        'user_metadata':payload
+                        'metadata':payload
                     })
-
-                    
-
                     return response
                 else:
                     mail_subject = "Activate your user account."
