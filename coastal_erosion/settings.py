@@ -135,7 +135,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 CORS_ALLOW_ALL_ORIGINS=True
-CSRF_TRUSTED_ORIGINS =['http://localhost:8000/']
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME":datetime.timedelta(days=7),
     "REFRESH_TOKEN_LIFETIME":datetime.timedelta(days=1),

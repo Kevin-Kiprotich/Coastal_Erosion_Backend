@@ -279,7 +279,7 @@ class GetUser(APIView):
 
 class LogoutView(APIView):
     permission_classes = (IsAuthenticated,)
-    def post(self,request):
+    def get(self,request):
         auth.logout(request)
         response = Response({
                         'Success': True,
