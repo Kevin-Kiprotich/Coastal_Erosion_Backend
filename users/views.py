@@ -56,12 +56,15 @@ class LoginView(APIView):
                 # return Response({'Success':True,'Message':"Login Successfull",'first_name':user.first_name,'last_name':user.last_name,'email':user.email})
                 if user.is_active:
                     auth.login(request,user)
-                    return Response({
+                    response = Response({
                         'Success': True,
-                        'access_token':str(access_token),
-                        'refresh_token':str(refresh_token),
-                        'metadata':payload
+                        'token': str(access_token),
+                        'user_metadata':payload
                     })
+
+                    
+
+                    return response
                 else:
                     mail_subject = "Activate your user account."
                     message = render_to_string("template_activate_account.html", {
