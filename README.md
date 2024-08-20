@@ -64,7 +64,7 @@ If the operation is successful, this is the response you'll get.
     }
 ```
 
-The access token is automatically set and stored by the browser such that it is inaccessible from the frontend. This helps prevent malicious `Cross Site Scripting (XSS)` and `Cross Site Request Forgery (CSRF)` attacks. Any other request that require authentication will have to include ```withCredentials=true``` in the request so that the token is included in the request.
+The access token is automatically set and stored by the browser such that it is inaccessible from the frontend. This helps prevent malicious `Cross Site Scripting (XSS)` and `Cross Site Request Forgery (CSRF)` attacks. Any other request that requires authentication will have to include ```withCredentials=true``` in the request so that the token is included in the request.
     
 ### Sign-up/Registration Sequence with axios
 * Make a **POST** request to SERVER_URL/api/signup/. The payload should be in this format:
