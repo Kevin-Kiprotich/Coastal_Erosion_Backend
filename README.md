@@ -36,7 +36,7 @@ Quit the server with CTRL-BREAK.
 ```
 
 ## Authentication
-Using ```axios``` you can send a request and then get a response which is a dictionary with a response message and boolean to show whether login or registration was successful. Remember to pass ```withCredentials=true``` when sending the login request. This will send a httponly cookie that the server will use to automatically authenticate the user.
+Using ```axios``` you can send a request and then get a response which is a dictionary with a response message and boolean to show whether login or registration was successful. 
 
 ### Login sequence
 * Make a **POST** request to SERVER_URL/api/login/. The payload should be in this format:
@@ -46,7 +46,7 @@ Using ```axios``` you can send a request and then get a response which is a dict
     "password": "password",
 }
 ```
-    
+Remember to pass ```withCredentials=true``` when sending the login request. This will send a httponly cookie that the server will use to automatically authenticate the user. 
     
 ### Sign-up/Registration Sequence with axios
 * Make a **POST** request to SERVER_URL/api/signup/. The payload should be in this format:
@@ -70,6 +70,28 @@ Using ```axios``` you can send a request and then get a response which is a dict
 
 ### Logout sequence
 * Make a **GET** request to SERVER_URL/api/logout/. This has no payload but make sure to pass ```withCredentials=True``` in the request. Otherwise the operation will be forbidden.
+
+### Request password change
+* Make a **POST** request to SERVER_URL/api/passwordupdate/. The payload should be in this format:
+
+```
+    {
+        "email":"example@example.com"
+    }
+```
+
+### Change password
+* Make a **POST** request to SERVER_URL/api/resetpassword/. The payload should be in this format:
+```
+    {
+        'token':'token',
+        'uid':'uid',
+        'password':'password'
+    }
+```
+**NB:** Obtain the `token` and `uid` from the password reset page url. It should look like this:
+`http://217.21.122.249/#/update-password?access_token={token}&uid={uidb64}`
+
 
 
 
