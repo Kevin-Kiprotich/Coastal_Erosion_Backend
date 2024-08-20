@@ -35,68 +35,49 @@ Starting development server at http://127.0.0.1:8000/
 Quit the server with CTRL-BREAK.
 ```
 
-## Front end implementation
-Using ```axios``` you can send a request and then get a response which is a dictionary with a response message and boolean to show whether login or registration was successful.
+## Authentication
+Using ```axios``` you can send a request and then get a response which is a dictionary with a response message and boolean to show whether login or registration was successful. Remember to pass ```withCredentials=true``` when sending the login request. This will send a httponly cookie that the server will use to automatically authenticate the user.
 
-### Login sequence using axios
-```const handleSubmit = async (e) => {
-        e.preventDefault();
-        await axios.post(' http://127.0.0.1:8000/login/', {
-            "email": logdata.email,
-            "password": logdata.password
-        }).then((res) => {
-            var log = res.data;
-            console.log(log);
-
-            if (log.Success) {
-                const accessToken = log.access_token// Your access token here
-                const decodedToken = jwt_decode(accessToken);
-                
-                if (decodedToken) {
-                    console.log(decodedToken)
-                    const data={
-                        email:decodedToken.email,
-                        first_name:decodedToken.first_name,
-                        last_name:decodedToken.last_name,
-                        phone_number:decodedToken.phone_number,
-                        institution:decodedToken.institution,
-                    }
-                    todash(data); 
-                } 
-                //todash(log.first_name,log.last_name);
-            } else {
-                console.log(log.Message)
-            }
-        }).catch((err) => console.log(err))
-    }
-  ```
+### Login sequence
+* Make a **POST** request to SERVER_URL/api/login/. The payload should be in this format:
+```
+{
+    "email": "example@example.com",
+    "password": "password",
+}
+```
     
     
 ### Sign-up/Registration Sequence with axios
+* Make a **POST** request to SERVER_URL/api/signup/. The payload should be in this format:
+
 ```
-const handleSubmit = async (e) => {
-        e.preventDefault()
-        //check password and confirm password front-end
-        if(confirmPassword !== Password){
-            setVal("Passwords do not match");
-            setCol("rgb(153,15,2)");
-        }else{
-            await axios.post(' http://127.0.0.1:8000/signup/',{
-                'first_name':logdata.first_name,
-                'last_name':logdata.last_name,
-                'email':logdata.email,
-                'institution':logdata.phone_number,
-                'password':logdata.password
-            }).then((res)=>{
-                if (res.data.Success){
-                    navigate("/")
-                }else{
-                    console.log(res.data.Message)
-                }    
-            }).catch((err) => console.log(err))
-        } 
-    }
-  ```
+{
+    "first_name":"firstname",
+    "last_name":"lastname",
+    "email": "example@example.com",
+    "institution": "institution",
+    "sector": "sector",
+    "role": "role",
+    "other_role": "other_role", // optional
+    "country": "country",
+    "password": "password",
+}
+```
+
+### Get user details
+* Make a **GET** request to SERVER_URL/api/getuser/. This has no payload but make sure to pass ```withCredentials=True``` in the request. Otherwise the operation will be forbidden.
+
+### Logout sequence
+* Make a **GET** request to SERVER_URL/api/logout/. This has no payload but make sure to pass ```withCredentials=True``` in the request. Otherwise the operation will be forbidden.
+
+
+
+
+
+
+
+
 
 
 

@@ -274,7 +274,7 @@ class GetUser(APIView):
                         'country':user.country 
                     } 
                 }
-        return Response({'Success':True,'metadata':payload})
+        return Response({'Success':True,'metadata':payload,})
 
 
 class LogoutView(APIView):
