@@ -66,10 +66,10 @@ Remember to pass ```withCredentials=true``` when sending the login request. This
 ```
 
 ### Get user details
-* Make a **GET** request to SERVER_URL/api/getuser/. This has no payload but make sure to pass ```withCredentials=True``` in the request. Otherwise the operation will be forbidden.
+* Make a **GET** request to SERVER_URL/api/getuser/. This has no payload but make sure to pass ```withCredentials=True``` in the request, otherwise the operation will be forbidden.
 
 ### Logout sequence
-* Make a **GET** request to SERVER_URL/api/logout/. This has no payload but make sure to pass ```withCredentials=True``` in the request. Otherwise the operation will be forbidden.
+* Make a **GET** request to SERVER_URL/api/logout/. This has no payload but make sure to pass ```withCredentials=True``` in the request, otherwise the operation will be forbidden.
 
 ### Request password change
 * Make a **POST** request to SERVER_URL/api/passwordupdate/. The payload should be in this format:
