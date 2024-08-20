@@ -46,7 +46,25 @@ Using ```axios``` you can send a request and then get a response which is a dict
     "password": "password",
 }
 ```
-Remember to pass ```withCredentials=true``` when sending the login request. This will send a httponly cookie that the server will use to automatically authenticate the user. 
+Remember to pass ```withCredentials=true``` when sending the login request. This will send a httponly cookie that the server will use to automatically authenticate the 
+
+If the operation is successful, this is the response you'll get.
+
+```
+    {
+        'email':email,
+        'user_metadata':{
+            'firstName':first_name,
+            'lastName':last_name,
+            'institution':institution,
+            'sector':sector,
+            'role':role,
+            'country':country 
+        } 
+    }
+```
+
+The access token is automatically set and stored by the browser such that it is inaccessible from the frontend. This helps prevent malicious `Cross Site Scripting (XSS)` and `Cross Site Request Forgery (CSRF)` attacks. Any other request that require authentication will have to include ```withCredentials=true``` in the request so that the token is included in the request.
     
 ### Sign-up/Registration Sequence with axios
 * Make a **POST** request to SERVER_URL/api/signup/. The payload should be in this format:
@@ -66,10 +84,10 @@ Remember to pass ```withCredentials=true``` when sending the login request. This
 ```
 
 ### Get user details
-* Make a **GET** request to SERVER_URL/api/getuser/. This has no payload but make sure to pass ```withCredentials=True``` in the request, otherwise the operation will be forbidden.
+* Make a **GET** request to SERVER_URL/api/getuser/. The user has to be authenticated so make sure to pass ```withCredentials=True``` in the request, otherwise the operation will be forbidden.
 
 ### Logout sequence
-* Make a **GET** request to SERVER_URL/api/logout/. This has no payload but make sure to pass ```withCredentials=True``` in the request, otherwise the operation will be forbidden.
+* Make a **GET** request to SERVER_URL/api/logout/. The user has to be authenticated so make sure to pass ```withCredentials=True``` in the request, otherwise the operation will be forbidden.
 
 ### Request password change
 * Make a **POST** request to SERVER_URL/api/passwordupdate/. The payload should be in this format:
