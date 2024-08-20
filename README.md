@@ -90,7 +90,7 @@ Remember to pass ```withCredentials=true``` when sending the login request. This
     }
 ```
 **NB:** Obtain the `token` and `uid` from the password reset page url. It should look like this:
-`SERVER_URL/#/update-password?access_token={token}&uid={uidb64}`
+`SERVER_URL/#/update-password?access_token={token}&uid={uid}`
 
 
 
