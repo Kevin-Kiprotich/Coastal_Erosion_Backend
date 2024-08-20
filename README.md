@@ -46,7 +46,7 @@ Using ```axios``` you can send a request and then get a response which is a dict
     "password": "password",
 }
 ```
-Remember to pass ```withCredentials=true``` when sending the login request. This will send a httponly cookie that the server will use to automatically authenticate the 
+Remember to pass ```withCredentials=true``` when sending the login request. This will send a httponly cookie that the server will use to automatically authenticate the user.
 
 If the operation is successful, this is the response you'll get.
 
@@ -86,8 +86,24 @@ The access token is automatically set and stored by the browser such that it is 
 ### Get user details
 * Make a **GET** request to SERVER_URL/api/getuser/. The user has to be authenticated so make sure to pass ```withCredentials=True``` in the request, otherwise the operation will be forbidden.
 
+If the operation is successful, this is the response you'll get.
+
+```
+    {
+        'email':email,
+        'user_metadata':{
+            'firstName':first_name,
+            'lastName':last_name,
+            'institution':institution,
+            'sector':sector,
+            'role':role,
+            'country':country 
+        } 
+    }
+```
+
 ### Logout sequence
-* Make a **GET** request to SERVER_URL/api/logout/. The user has to be authenticated so make sure to pass ```withCredentials=True``` in the request, otherwise the operation will be forbidden.
+* Make a **GET** request to SERVER_URL/api/logout/. The user has to be authenticated so make sure to pass ```withCredentials=True``` in the request, otherwise the operation will be forbidden. This will delete the access token and logout the user.
 
 ### Request password change
 * Make a **POST** request to SERVER_URL/api/passwordupdate/. The payload should be in this format:
@@ -97,6 +113,7 @@ The access token is automatically set and stored by the browser such that it is 
         "email":"example@example.com"
     }
 ```
+ A verification email will be sent to the provided email which will redirect the user to a page to provide a new password.
 
 ### Change password
 * Make a **POST** request to SERVER_URL/api/resetpassword/. The payload should be in this format:
