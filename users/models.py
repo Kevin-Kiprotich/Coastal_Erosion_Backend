@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.db.models import Count
 
 from .managers import CustomUserManager
 
@@ -37,5 +38,61 @@ class countryStats(models.Model):
     users=models.IntegerField(null=False,default=0)
     def __str__(self):
         return f"{self.country}"
+    
+    # class Meta:
+    #     verbose_name_plural="Country Statistics"
+
+class CountryCount(models.Model):
+    country = models.CharField(max_length=100, unique=True)
+    user_count = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.country.capitalize()}"
+    
     class Meta:
-        verbose_name_plural="Country Statistics"
+        verbose_name_plural = "Country Statistics"
+
+
+class SectorCount(models.Model):
+    sector = models.CharField(max_length=40, unique=True)
+    user_count = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.sector}"
+    
+    class Meta:
+        verbose_name_plural = "Sector Statistics"
+
+
+class InstitutionCount(models.Model):
+    institution = models.CharField(max_length=255, unique=True)
+    user_count = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.institution}"
+    
+    class Meta:
+        verbose_name_plural = "Institution Statistics"
+
+
+class RoleCount(models.Model):
+    role = models.CharField(max_length=255, unique=True)
+    user_count = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.role}"
+    
+    class Meta:
+        verbose_name_plural = "Role Statistics"
+    
+class MonthlyUserRegistration(models.Model):
+    month = models.CharField(max_length=20)  # Store month as a number from 1 (January) to 12 (December)
+    year = models.IntegerField()
+    registration_count = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        unique_together = ('month', 'year')
+        verbose_name_plural = "Registration per Month"
+
+    def __str__(self):
+        return f"{self.month}/{self.year}"
