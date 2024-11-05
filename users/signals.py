@@ -7,7 +7,8 @@ from .updateStats import update_statistics  # Adjust the import as necessary
 @receiver(post_save, sender=AppUser)
 def user_saved(sender, instance, created, **kwargs):
     # Call update_statistics after a user is created or updated
-    update_statistics()
+    if created:
+        update_statistics()
 
 @receiver(post_delete, sender=AppUser)
 def user_deleted(sender, instance, **kwargs):
